@@ -38,8 +38,8 @@ func (h *UsersHTTPHandler) CreateUser(rw http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	response := CreateUserResponse(userDTOFromDomain(userDomain))
 
+	response := CreateUserResponse(userDTOFromDomain(userDomain))
 	responseHandler.JSONResponse(response, http.StatusCreated)
 }
 
