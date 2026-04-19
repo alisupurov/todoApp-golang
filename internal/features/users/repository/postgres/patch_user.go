@@ -6,8 +6,7 @@ import (
 	"fmt"
 
 	"github.com/alisupurov/todoApp-golang/internal/core/domain"
-	core_errors "github.com/alisupurov/todoApp-golang/internal/core/errors"
-	"github.com/jackc/pgx/v5"
+	core_postgres_pool "github.com/alisupurov/todoApp-golang/internal/core/repository/postgres/pool"
 )
 
 func (r *UsersRepository) PatchUser(ctx context.Context, id int, user domain.User) (domain.User, error) {
@@ -35,8 +34,8 @@ func (r *UsersRepository) PatchUser(ctx context.Context, id int, user domain.Use
 	)
 	
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return domain.User{}, fmt.Errorf("user with id=%d concurrently acessed: %w", id, core_errors.ErrConflict)
+		if errors.Is(err, core_postgres_pool.ErrNoRows) {
+			return domain.User{}, fmt.Errorf("user with id=%d concurrently acessed: %w", id, core_postgres_pool.ErrNoRows)
 		} else {
 			return domain.User{}, fmt.Errorf("scan error")
 		}

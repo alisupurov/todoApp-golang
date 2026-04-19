@@ -6,8 +6,7 @@ import (
 	"fmt"
 
 	"github.com/alisupurov/todoApp-golang/internal/core/domain"
-	core_errors "github.com/alisupurov/todoApp-golang/internal/core/errors"
-	"github.com/jackc/pgx/v5"
+	core_postgres_pool "github.com/alisupurov/todoApp-golang/internal/core/repository/postgres/pool"
 )
 
 func (r *UsersRepository) GetUser(
@@ -34,8 +33,8 @@ func (r *UsersRepository) GetUser(
 	)
 
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return domain.User{}, fmt.Errorf("user with id %d not found: %w", id, core_errors.ErrNotFound)
+		if errors.Is(err, core_postgres_pool.ErrNoRows) {
+			return domain.User{}, fmt.Errorf("user with id %d not found: %w", id, core_postgres_pool.ErrNoRows)
 		}
 
 		return domain.User{}, fmt.Errorf("scan error: %w", err)
