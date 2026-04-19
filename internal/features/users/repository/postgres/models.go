@@ -10,14 +10,14 @@ type UserModel struct {
 }
 
 func userDomainsFromModels(userModels []UserModel) []domain.User {
-	users := make([]domain.User, len(userModels))
+	userDomains := make([]domain.User, len(userModels))
 	for i, user := range userModels {
-		users[i] = domain.NewUser(
+		userDomains[i] = domain.NewUser(
 			user.ID,
 			user.Version,
 			user.Full_name,
 			user.Phone_number,
 		)
 	}
-	return users
+	return userDomains
 }
