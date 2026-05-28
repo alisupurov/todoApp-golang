@@ -10,7 +10,7 @@ import (
 )
 
 func (r *UsersRepository) PatchUser(ctx context.Context, id int, user domain.User) (domain.User, error) {
-	ctx, cancel := context.WithTimeout(ctx, r.pool.GetTimeoutPgx())
+	ctx, cancel := context.WithTimeout(ctx, r.pool.OpTimeout())
 	defer cancel()
 
 	query := `
