@@ -7,11 +7,11 @@ import (
 	"github.com/alisupurov/todoApp-golang/internal/core/domain"
 )
 
-func (r *UsersRepository) CreateUser(
+func (r *UsersRepository) CreateUser (
 	ctx context.Context,
 	user domain.User,
 ) (domain.User, error) {
-	ctx, cancel := context.WithTimeout(ctx, r.pool.GetTimeoutPgx())
+	ctx, cancel := context.WithTimeout(ctx, r.pool.OpTimeout())
 	defer cancel()
 
 	query := `

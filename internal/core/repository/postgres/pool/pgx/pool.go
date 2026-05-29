@@ -46,7 +46,7 @@ func NewPool(
 	}, nil
 }
 
-func (p *Pool) GetTimeoutPgx() time.Duration {
+func (p *Pool) OpTimeout() time.Duration {
 	return p.opTimeout
 }
 

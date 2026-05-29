@@ -28,24 +28,24 @@ func (h *UsersHTTPHandler) GetUsers(rw http.ResponseWriter, r *http.Request) {
 		responseHandler.ErrorResponse(err, "failed to get users")
 		return
 	}
-
+   
 	response := GetUsersResponse(usersDTOFromDomain(users))
 
 	responseHandler.JSONResponse(response, http.StatusOK)
 }
 
-func getLimitOffsetFromRequest(r *http.Request) (limit, offset *int, err error) {
+func getLimitOffsetFromRequest(r *http.Request) (*int, *int, error) {
 	const (
 		limitQueryParam  = "limit"
 		offsetQueryParam = "offset"
 	)
 
-	limit, err = core_http_request.GetIntQueryParam(r, limitQueryParam)
+	limit, err := core_http_request.GetIntQueryParam(r, limitQueryParam)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get limit query param: %w", err)
 	}
 
-	offset, err = core_http_request.GetIntQueryParam(r, offsetQueryParam)
+	offset, err := core_http_request.GetIntQueryParam(r, offsetQueryParam)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to get offset query param: %w", err)
 	}

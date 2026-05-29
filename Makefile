@@ -52,6 +52,16 @@ env-port-forward:
 env-port-close:
 	@docker compose down port-forwarder
 
+logs-cleanup:
+	@read -p "Очистить все log файлы? Опасность утери логов. [y/N]: " ans; \
+	if [ "$$ans" = "y" ]; then \
+		docker compose down todo-postgres port-forwarder && \
+		sudo rm -rf ${PROJECT_ROOT}/out/logs&& \
+		echo "Файлы логов очищены"; \
+	else \
+		echo "Очистка логов отменена"; \
+	fi
+
 todoapp-run:
 	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
 	export POSTGRES_HOST=localhost && \
