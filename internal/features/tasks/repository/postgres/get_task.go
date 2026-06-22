@@ -30,6 +30,7 @@ func (r *TasksRepository) GetTask(
 	err := row.Scan(
 		&taskModel.ID,
 		&taskModel.Version,
+		&taskModel.Title,
 		&taskModel.Description,
 		&taskModel.Completed,
 		&taskModel.CreatedAt,

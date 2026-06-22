@@ -50,6 +50,7 @@ func (h *TasksHTTPHandler) PatchTask(rw http.ResponseWriter, r *http.Request) {
 	id, err := core_http_request.GetIntPathValue(r, "id")
 	if err != nil {
 		responseHandler.ErrorResponse(err, "failed to get id in path value")
+		return
 	}
 
 	var request PatchTaskRequest

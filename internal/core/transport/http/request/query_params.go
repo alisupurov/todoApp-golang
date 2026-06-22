@@ -35,7 +35,7 @@ func GetDateQueryParam(r *http.Request, key string) (*time.Time, error) {
 		return nil, nil
 	}
 
-	layout := "2020-05-05"
+	layout := "2006-01-02"
 
 	date, err := time.Parse(layout, param)
 	if err != nil {

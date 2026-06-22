@@ -13,7 +13,7 @@ env-cleanup:
 	@read -p "Очистить все volume файлы? Опасность утери данных. [y/N]: " ans; \
 	if [ "$$ans" = "y" ]; then \
 		docker compose down todo-postgres port-forwarder && \
-		sudo rm -rf ${PROJECT_ROOT}/out/pgdata&& \
+		sudo rm -rf ${PROJECT_ROOT}/.out/pgdata&& \
 		echo "Файлы окружения очищены"; \
 	else \
 		echo "Очистка окружения отменена"; \
@@ -56,14 +56,23 @@ logs-cleanup:
 	@read -p "Очистить все log файлы? Опасность утери логов. [y/N]: " ans; \
 	if [ "$$ans" = "y" ]; then \
 		docker compose down todo-postgres port-forwarder && \
-		sudo rm -rf ${PROJECT_ROOT}/out/logs&& \
+		sudo rm -rf ${PROJECT_ROOT}/.out/logs&& \
 		echo "Файлы логов очищены"; \
 	else \
 		echo "Очистка логов отменена"; \
 	fi
 
 todoapp-run:
-	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
+	@export LOGGER_FOLDER=${PROJECT_ROOT}/.out/logs && \
 	export POSTGRES_HOST=localhost && \
 	go mod tidy && \
 	go run ${PROJECT_ROOT}/cmd/todoapp/main.go
+
+todoapp-deploy:
+	@docker compose up -d --build todoapp
+
+todoapp-undeploy:
+	@docker compose down todoapp
+
+ps:
+	@docker compose ps

@@ -30,17 +30,17 @@ func (r *StatisticsRepository) GetTasks(
 	conditions := []string{}
 
 	if userId != nil {
-		conditions = append(conditions, fmt.Sprintf("author_user_id=&%d", len(args)+1))
+		conditions = append(conditions, fmt.Sprintf("author_user_id=$%d", len(args)+1))
 		args = append(args, userId)
 	}
 
 	if from != nil {
-		conditions = append(conditions, fmt.Sprintf("created_at>=&%d", len(args)+1))
+		conditions = append(conditions, fmt.Sprintf("created_at>=$%d", len(args)+1))
 		args = append(args, from)
 	}
 
 	if to != nil {
-		conditions = append(conditions, fmt.Sprintf("created_at<&%d", len(args)+1))
+		conditions = append(conditions, fmt.Sprintf("created_at<$%d", len(args)+1))
 		args = append(args, to)
 	}
 

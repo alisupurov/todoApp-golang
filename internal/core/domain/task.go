@@ -145,7 +145,16 @@ func (t *Task) ApplyPatch(patch TaskPatch) error {
 		tmp.Description = patch.Description.Value
 	}
 
-	tmp.Completed = *patch.Completed.Value
+	if patch.Completed.Set {
+		tmp.Completed = *patch.Completed.Value
+
+		if tmp.Completed {
+			completedAt := time.Now()
+			tmp.CompletedAt = &completedAt
+		} else {
+			tmp.CompletedAt = nil
+		}
+	}
 
 	if err := tmp.Validate(); err != nil {
 		return fmt.Errorf("validate patched task: %w", err)

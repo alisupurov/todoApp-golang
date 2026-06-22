@@ -49,7 +49,7 @@ func (r *TasksRepository) CreateTask(
 	if err != nil {
 		if errors.Is(err, core_postgres_pool.ErrViolatesForeignKey) {
 			return domain.Task{}, fmt.Errorf("%v: user with id=%d: %w",
-				err, taskModel.AuthorUserID, core_errors.ErrNotFound)
+				err, task.AuthorUserId, core_errors.ErrNotFound)
 		}
 		return domain.Task{}, fmt.Errorf("scan error %w", err)
 	}
