@@ -14,7 +14,7 @@ func (s *UsersService) GetUsers(
 	offset *int,
 ) ([]domain.User, error) {
 	if limit != nil && *limit <= 0 {
-		return nil, fmt.Errorf("limit must be greater than %w", core_errors.ErrInvalidArgument)
+		return nil, fmt.Errorf("limit must be greater than 0: %w", core_errors.ErrInvalidArgument)
 	}
 	if offset != nil && *offset < 0 {
 		return nil, fmt.Errorf("offset must be greater than or equal to 0: %w", core_errors.ErrInvalidArgument)

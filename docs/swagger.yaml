@@ -1,0 +1,613 @@
+basePath: /api/v1
+definitions:
+  github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse:
+    properties:
+      error:
+        example: full error text
+        type: string
+      message:
+        example: short-human readable message
+        type: string
+    type: object
+  github_com_alisupurov_todoApp-golang_internal_core_transport_http_types.Nullable-string:
+    properties:
+      set:
+        type: boolean
+      value:
+        type: string
+    type: object
+  internal_features_statistics_transport_http.GetStatisticsResponse:
+    properties:
+      tasks_average_complete_time:
+        example: 9h59m18s
+        type: string
+      tasks_completed:
+        example: 6
+        type: integer
+      tasks_completed_rate:
+        example: 60
+        type: number
+      tasks_created:
+        example: 10
+        type: integer
+    type: object
+  internal_features_tasks_transport_http.CreateTaskRequest:
+    properties:
+      author_user_id:
+        example: 4
+        type: integer
+      description:
+        example: 2 литра
+        maxLength: 1000
+        minLength: 1
+        type: string
+      title:
+        example: Купить молоко
+        maxLength: 100
+        minLength: 1
+        type: string
+    required:
+    - title
+    type: object
+  internal_features_tasks_transport_http.CreateTaskResponse:
+    properties:
+      author_user_id:
+        example: 4
+        type: integer
+      completed:
+        example: false
+        type: boolean
+      completed_at:
+        example: "2026-06-21T21:34:00Z"
+        type: string
+      created_at:
+        example: "2026-06-21T21:33:15.393205Z"
+        type: string
+      description:
+        example: 2 литра
+        type: string
+      id:
+        example: 5
+        type: integer
+      title:
+        example: Купить молоко
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_features_tasks_transport_http.GetTaskResponse:
+    properties:
+      author_user_id:
+        example: 4
+        type: integer
+      completed:
+        example: false
+        type: boolean
+      completed_at:
+        example: "2026-06-21T21:34:00Z"
+        type: string
+      created_at:
+        example: "2026-06-21T21:33:15.393205Z"
+        type: string
+      description:
+        example: 2 литра
+        type: string
+      id:
+        example: 5
+        type: integer
+      title:
+        example: Купить молоко
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_features_tasks_transport_http.PatchTaskRequest:
+    type: object
+  internal_features_tasks_transport_http.PatchTaskResponse:
+    properties:
+      author_user_id:
+        example: 4
+        type: integer
+      completed:
+        example: false
+        type: boolean
+      completed_at:
+        example: "2026-06-21T21:34:00Z"
+        type: string
+      created_at:
+        example: "2026-06-21T21:33:15.393205Z"
+        type: string
+      description:
+        example: 2 литра
+        type: string
+      id:
+        example: 5
+        type: integer
+      title:
+        example: Купить молоко
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_features_tasks_transport_http.TaskDTOResponse:
+    properties:
+      author_user_id:
+        example: 4
+        type: integer
+      completed:
+        example: false
+        type: boolean
+      completed_at:
+        example: "2026-06-21T21:34:00Z"
+        type: string
+      created_at:
+        example: "2026-06-21T21:33:15.393205Z"
+        type: string
+      description:
+        example: 2 литра
+        type: string
+      id:
+        example: 5
+        type: integer
+      title:
+        example: Купить молоко
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_features_users_transport_http.CreateUserRequest:
+    properties:
+      full_name:
+        example: Иван Иванов
+        maxLength: 100
+        minLength: 3
+        type: string
+      phone_number:
+        example: "+79995553322"
+        maxLength: 15
+        minLength: 10
+        type: string
+    required:
+    - full_name
+    type: object
+  internal_features_users_transport_http.CreateUserResponse:
+    properties:
+      full_name:
+        example: Иван Иванов
+        type: string
+      id:
+        example: 10
+        type: integer
+      phone_number:
+        example: "79995553322"
+        type: string
+      version:
+        example: 3
+        type: integer
+    type: object
+  internal_features_users_transport_http.GetUserResponse:
+    properties:
+      full_name:
+        example: Иван Иванов
+        type: string
+      id:
+        example: 10
+        type: integer
+      phone_number:
+        example: "79995553322"
+        type: string
+      version:
+        example: 3
+        type: integer
+    type: object
+  internal_features_users_transport_http.PatchUserRequest:
+    type: object
+  internal_features_users_transport_http.PatchUserResponse:
+    properties:
+      full_name:
+        example: Иван Иванов
+        type: string
+      id:
+        example: 10
+        type: integer
+      phone_number:
+        example: "79995553322"
+        type: string
+      version:
+        example: 3
+        type: integer
+    type: object
+  internal_features_users_transport_http.UserDTOResponse:
+    properties:
+      full_name:
+        example: Иван Иванов
+        type: string
+      id:
+        example: 10
+        type: integer
+      phone_number:
+        example: "79995553322"
+        type: string
+      version:
+        example: 3
+        type: integer
+    type: object
+host: 127.0.0.1:5050
+info:
+  contact: {}
+  description: Todo Application REST-API schema
+  title: Golang To do API
+  version: "1.0"
+paths:
+  /statistics:
+    get:
+      description: Получить агрегированную статистику по задачам с фильтрами по автору
+        и периоду
+      parameters:
+      - description: ID автора задачи
+        in: query
+        name: user_id
+        type: integer
+      - description: Дата начала периода (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: Дата конца периода (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Статистика
+          schema:
+            $ref: '#/definitions/internal_features_statistics_transport_http.GetStatisticsResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+      summary: Получить статистику по задачам
+      tags:
+      - statistics
+  /tasks:
+    get:
+      description: Получить список задач с пагинацией и фильтром по автору
+      parameters:
+      - description: Лимит записей
+        in: query
+        name: limit
+        type: integer
+      - description: Смещение
+        in: query
+        name: offset
+        type: integer
+      - description: ID автора задачи
+        in: query
+        name: user_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список задач
+          schema:
+            items:
+              $ref: '#/definitions/internal_features_tasks_transport_http.TaskDTOResponse'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+      summary: Получить список задач
+      tags:
+      - tasks
+    post:
+      consumes:
+      - application/json
+      description: Создать новую задачу в системе
+      parameters:
+      - description: CreateTask тело
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_features_tasks_transport_http.CreateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Успешно созданная задача
+          schema:
+            $ref: '#/definitions/internal_features_tasks_transport_http.CreateTaskResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Автор задачи не найден
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+      summary: Создать задачу
+      tags:
+      - tasks
+  /tasks/{id}:
+    delete:
+      description: Удалить задачу по идентификатору
+      parameters:
+      - description: ID задачи
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Задача удалена
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+      summary: Удалить задачу
+      tags:
+      - tasks
+    get:
+      description: Получить задачу по идентификатору
+      parameters:
+      - description: ID задачи
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Задача
+          schema:
+            $ref: '#/definitions/internal_features_tasks_transport_http.GetTaskResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+      summary: Получить задачу
+      tags:
+      - tasks
+    patch:
+      consumes:
+      - application/json
+      description: Частично обновить данные задачи
+      parameters:
+      - description: ID задачи
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: PatchTask тело
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_features_tasks_transport_http.PatchTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Обновлённая задача
+          schema:
+            $ref: '#/definitions/internal_features_tasks_transport_http.PatchTaskResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+      summary: Обновить задачу
+      tags:
+      - tasks
+  /users:
+    get:
+      description: Получить список пользователей с пагинацией
+      parameters:
+      - description: Лимит записей
+        in: query
+        name: limit
+        type: integer
+      - description: Смещение
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список пользователей
+          schema:
+            items:
+              $ref: '#/definitions/internal_features_users_transport_http.UserDTOResponse'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+      summary: Получить список пользователей
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Создать нового пользователя в системе
+      parameters:
+      - description: CreateUser тело
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_features_users_transport_http.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Успешно созданный пользователь
+          schema:
+            $ref: '#/definitions/internal_features_users_transport_http.CreateUserResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+      summary: Создать пользователя
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      description: Удалить пользователя по идентификатору
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Пользователь удалён
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+      summary: Удалить пользователя
+      tags:
+      - users
+    get:
+      description: Получить пользователя по идентификатору
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Пользователь
+          schema:
+            $ref: '#/definitions/internal_features_users_transport_http.GetUserResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+      summary: Получить пользователя
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: Частично обновить данные пользователя
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: PatchUser тело
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_features_users_transport_http.PatchUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Обновлённый пользователь
+          schema:
+            $ref: '#/definitions/internal_features_users_transport_http.PatchUserResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_alisupurov_todoApp-golang_internal_core_transport_http_response.ErrorResponse'
+      summary: Обновить пользователя
+      tags:
+      - users
+swagger: "2.0"

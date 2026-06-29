@@ -11,6 +11,18 @@ import (
 
 type GetTasksResponse []TaskDTOResponse
 
+// GetTasks godoc
+// @Summary      Получить список задач
+// @Description  Получить список задач с пагинацией и фильтром по автору
+// @Tags         tasks
+// @Produce      json
+// @Param        limit query int false "Лимит записей"
+// @Param        offset query int false "Смещение"
+// @Param        user_id query int false "ID автора задачи"
+// @Success      200  {array}   TaskDTOResponse "Список задач"
+// @Failure      400  {object}  core_http_response.ErrorResponse "Bad request"
+// @Failure      500  {object}  core_http_response.ErrorResponse "Internal server error"
+// @Router       /tasks [get]
 func (h *TasksHTTPHandler) GetTasks(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)
