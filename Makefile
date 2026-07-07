@@ -3,13 +3,15 @@ export
 
 export PROJECT_ROOT=${shell pwd}
 
-env-up:
+.DEFAULT_GOAL := help
+
+env-up: ## env: Запустить окружение проекта (PostgreSQL + Redis)
 	@docker compose up -d todo-postgres todo-redis
 
-env-down:
+env-down: ## env: Остановить окружение проекта
 	@docker compose down todo-postgres todo-redis
 
-env-cleanup:
+env-cleanup: ## env: Очистить volume файлы окружения
 	@read -p "Очистить все volume файлы? Опасность утери данных. [y/N]: " ans; \
 	if [ "$$ans" = "y" ]; then \
 		docker compose down todo-postgres port-forwarder && \
@@ -19,7 +21,7 @@ env-cleanup:
 		echo "Очистка окружения отменена"; \
 	fi
 
-migrate-create:
+migrate-create: ## PostgreSQL: Создать новую версию схемы данных
 	@if [ -z "$(seq)" ]; then \
 		echo "Отсутствует необходимый параметр 'seq'. Пример: make migrate-create seq=init"; \
 		exit 1; \
@@ -40,19 +42,19 @@ migrate-action:
 	-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@todo-postgres:5432/${POSTGRES_DB}?sslmode=disable \
 	"$(action)"
 
-migrate-up:
+migrate-up: ## PostgreSQL: Накатить миграции
 	@make migrate-action action=up
 
-migrate-down:
+migrate-down: ## PostgreSQL: Откатить миграции
 	@make migrate-action action=down
 
-env-port-forward:
+env-port-forward: ## env: Открыть порты сервисов окружения
 	@docker compose up -d port-forwarder
 
-env-port-close:
+env-port-close: ## env: Закрыть порты сервисов окружения
 	@docker compose down port-forwarder
 
-logs-cleanup:
+logs-cleanup: ## env: Очистить файлы логов
 	@read -p "Очистить все log файлы? Опасность утери логов. [y/N]: " ans; \
 	if [ "$$ans" = "y" ]; then \
 		docker compose down todo-postgres port-forwarder && \
@@ -62,25 +64,31 @@ logs-cleanup:
 		echo "Очистка логов отменена"; \
 	fi
 
-todoapp-run:
+todoapp-run: ## Golang приложение: Запустить локально (для разработки)
 	@export LOGGER_FOLDER=${PROJECT_ROOT}/.out/logs && \
 	export POSTGRES_HOST=localhost && \
 	export REDIS_HOST=localhost && \
 	go mod tidy && \
 	go run ${PROJECT_ROOT}/cmd/todoapp/main.go
 
-todoapp-deploy:
+todoapp-deploy: ## Golang приложение: Запустить в Docker Compose (для деплоя)
 	@docker compose up -d --build todoapp
 
-todoapp-undeploy:
+todoapp-undeploy: ## Golang приложение: Остановить Docker Compose сервис
 	@docker compose down todoapp
 
-swagger-gen:
+swagger-gen: ## Swagger: Сгенерировать актуальную спецификацию
 	@docker compose run --rm swagger \
 		init \
 		-g cmd/todoapp/main.go \
 		-o docs \
 		--parseInternal \
 		--parseDependency
-ps:
+ps: ## env: Посмотреть запущенные Docker Compose сервисы
 	@docker compose ps
+
+help: ## Показать справку по командам
+	@echo "=== Центр управления проектом ==="
+	@echo ""
+	@echo "Доступные команды:"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
