@@ -4,10 +4,10 @@ export
 export PROJECT_ROOT=${shell pwd}
 
 env-up:
-	@docker compose up -d todo-postgres
+	@docker compose up -d todo-postgres todo-redis
 
 env-down:
-	@docker compose down todo-postgres
+	@docker compose down todo-postgres todo-redis
 
 env-cleanup:
 	@read -p "Очистить все volume файлы? Опасность утери данных. [y/N]: " ans; \
@@ -65,6 +65,7 @@ logs-cleanup:
 todoapp-run:
 	@export LOGGER_FOLDER=${PROJECT_ROOT}/.out/logs && \
 	export POSTGRES_HOST=localhost && \
+	export REDIS_HOST=localhost && \
 	go mod tidy && \
 	go run ${PROJECT_ROOT}/cmd/todoapp/main.go
 

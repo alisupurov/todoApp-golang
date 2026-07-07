@@ -10,10 +10,17 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_TIMEOUT=${POSTGRES_TIMEOUT}
+      - REDIS_HOST=todo-redis
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=${REDIS_DB}
+      - REDIS_TTL=${REDIS_TTL}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES=${JWT_EXPIRES}
       - LOGGER_LEVEL=${LOGGER_LEVEL}
       - LOGGER_FOLDER=/app/out/logs
       - PROJECT_ROOT=${PROJECT_ROOT}
       - HTTP_ADDR=:5050
+      - HTTP_ALLOWED_ORIGINS=${HTTP_ALLOWED_ORIGINS}
       - SHUTDOWN_TIMEOUT=${SHUTDOWN_TIMEOUT}
     volumes:
       - ${PROJECT_ROOT}/.out/logs:/app/out/logs
@@ -31,6 +38,14 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
       - ${PROJECT_ROOT}/.out/pgdata:/var/lib/postgresql
+    restart: always
+
+  todo-redis:
+    image: redis:7.4-alpine
+    container_name: todoapp-env-redis
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "127.0.0.1:6379:6379"
     restart: always
 
   todo-postgres-migrate:

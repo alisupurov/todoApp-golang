@@ -1,0 +1,23 @@
+package web_service
+
+import (
+	"fmt"
+	"os"
+	"path"
+)
+// GetMainPage возвращает содержимое главной HTML-страницы.
+// Путь к файлу формируется относительно PROJECT_ROOT (переменная окружения),
+// чтобы приложение работало корректно независимо от рабочей директории запуска.
+func (s *WebService) GetMainPage() ([]byte, error) {
+	htmlFilePath := path.Join(
+		os.Getenv("PROJECT_ROOT"),
+		"/public/index.html",
+	)
+
+	htmlFile, err := s.webRepository.GetFile(htmlFilePath)
+	if err != nil {
+		return nil, fmt.Errorf("get file from repository: %w", err)
+	}
+
+	return htmlFile, nil
+}

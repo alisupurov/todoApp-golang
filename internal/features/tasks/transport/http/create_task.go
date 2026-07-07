@@ -10,8 +10,8 @@ import (
 )
 
 type CreateTaskRequest struct {
-	Title        string  `json:"title" validate:"required,min=1,max=100"              example:"Купить молоко"`
-	Description  *string `json:"description" validate:"omitempty,min=3,max=1000"      example:"2 литра"`
+	Title        string  `json:"title" validate:"required,min=3,max=100"              example:"Купить молоко"`
+	Description  *string `json:"description" validate:"omitempty,min=1,max=1000"      example:"2 литра"`
 	AuthorUserID int     `json:"author_user_id" validate:"required"                   example:"4"`
 }
 
