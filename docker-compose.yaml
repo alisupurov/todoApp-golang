@@ -20,6 +20,7 @@ services:
       - LOGGER_FOLDER=/app/out/logs
       - PROJECT_ROOT=${PROJECT_ROOT}
       - HTTP_ADDR=:5050
+      - HTTP_ALLOWED_ORIGINS=${HTTP_ALLOWED_ORIGINS}
       - SHUTDOWN_TIMEOUT=${SHUTDOWN_TIMEOUT}
     volumes:
       - ${PROJECT_ROOT}/.out/logs:/app/out/logs
