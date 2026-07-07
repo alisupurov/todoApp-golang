@@ -50,6 +50,9 @@ func (h *HTTPResponseHandler) ErrorResponse(err error, msg string) {
 	case errors.Is(err, core_errors.ErrConflict):
 		statusCode = http.StatusConflict
 		logFunc = h.log.Warn
+	case errors.Is(err, core_errors.ErrUnauthorized):
+		statusCode = http.StatusUnauthorized
+		logFunc = h.log.Warn
 	default:
 		statusCode = http.StatusInternalServerError
 		logFunc = h.log.Error
@@ -69,8 +72,13 @@ func (h *HTTPResponseHandler) PanicResponse(p any, msg string) {
 }
 
 func (h *HTTPResponseHandler) errorResponse(statusCode int, err error, msg string) {
+	errMsg := err.Error()
+	if statusCode >= http.StatusInternalServerError {
+		errMsg = "internal server error"
+	}
+
 	response := ErrorResponse{
-		Error: err.Error(),
+		Error:   errMsg,
 		Message: msg,
 	}
 
@@ -79,4 +87,14 @@ func (h *HTTPResponseHandler) errorResponse(statusCode int, err error, msg strin
 
 func (h *HTTPResponseHandler) NoContentResponse() {
 	h.rw.WriteHeader(http.StatusNoContent)
+}
+
+// HTMLResponse отправляет HTML-страницу с Content-Type: text/html.
+func (h *HTTPResponseHandler) HTMLResponse(htmlFile []byte) {
+	h.rw.Header().Set("Content-Type", "text/html; charset=utf-8")
+	h.rw.WriteHeader(http.StatusOK)
+
+	if _, err := h.rw.Write(htmlFile); err != nil {
+		h.log.Error("write HTML HTTP response", zap.Error(err))
+	}
 }
